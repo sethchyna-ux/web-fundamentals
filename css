@@ -1,0 +1,99 @@
+:root {
+    --bg-color: #1a1614;           /* Deep obsidian-earth background */
+    --card-bg: #25201d;            /* Lighter warm-charcoal for cards & surfaces */
+    --text-main: #f4eae1;          /* Soft bone-white for high readability */
+    --text-muted: #baafaa;         /* Muted sand-grey for secondary text/metadata */
+    --accent-gold: #d4af37;        /* Celestial gold for ratings, highlights, prices */
+    --accent-terracotta: #c27052;  /* Earthy terracotta for primary interactive actions */
+    --radius: 12px;                /* Standard container corner rounding */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Snappy, organic easing */
+}body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: 'Lora', serif; /* Elegant, literary serif for prose */
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* Cosmic micro-dot grid */
+    background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+    background-size: 24px 24px;
+}header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px); /* Frosted blur effect over content scrolling beneath */
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(26, 22, 20, 0.8);
+}.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2.5rem;
+    margin-bottom: 5rem;
+}.drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.7);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 200;
+    transition: var(--transition);
+}
+.drawer-overlay.open {
+    opacity: 1;
+    visibility: visible;
+}
+.drawer {
+    position: fixed;
+    top: 0;
+    right: -400px; /* Hidden off-screen by default */
+    width: 400px;
+    max-width: 100%;
+    height: 100vh;
+    background: var(--card-bg);
+    z-index: 201;
+    padding: 2rem;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+.drawer.open {
+    right: 0; /* Slides smoothly into viewport */
+}.product-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.02);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+.product-card:hover {
+    transform: translateY(-8px); /* Card physically lifts up */
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4); /* Shadow deepens to imply height */
+    border-color: rgba(255,255,255,0.08);
+}@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.post-card {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid rgba(255,255,255,0.02);
+    animation: fadeIn 0.5s ease; /* Triggered instantly on DOM insertion */
+}

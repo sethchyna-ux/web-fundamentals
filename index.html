@@ -1,40 +1,804 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Trail Guide</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <header>
-      <h1>Trail Guide</h1>
-      <nav>
-        <a href="#">Home</a>
-        <a href="#">Trails</a>
-        <a href="#">Gear</a>
-      </nav>
-    </header>
+<html lang="en">
 
-    <main>
-      <section class="hero">
-        <h2>Find your next outdoor route</h2>
-        <p>Simple trail tips for beginners who want fresh air, movement, and a clear plan.</p>
-      </section>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folksy Roll | Celestial Artisan Goods</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Space+Grotesk:wght@400;500&display=swap"
+    rel="stylesheet">
 
-      <section class="cards">
-        <article class="card">
-          <h3>Easy Walks</h3>
-          <p>Short routes with low elevation and simple paths.</p>
-        </article>
+  <style>
+    :root {
+      --bg-color: #1a1614;
+      --card-bg: #25201d;
+      --text-main: #f4eae1;
+      --text-muted: #baafaa;
+      --accent-gold: #d4af37;
+      --accent-terracotta: #c27052;
+      --radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        <article class="card">
-          <h3>Weekend Hikes</h3>
-          <p>Longer trails for building confidence and endurance.</p>
-        </article>
-      </section>
-    </main>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-    <footer>
-      <p>Built by Derrick</p>
-    </footer>
-  </body>
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Lora', serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    /* Navigation */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(26, 22, 20, 0.8);
+    }
+
+    .logo {
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--text-main);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .nav-btn:hover {
+      color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -10px;
+      background: var(--accent-terracotta);
+      color: white;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    /* Hero Section */
+    .hero {
+      max-width: 800px;
+      margin: 4rem auto;
+      text-align: center;
+      padding: 0 1.5rem;
+    }
+
+    .hero-tag {
+      font-family: 'Space Grotesk', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 0.85rem;
+      color: var(--accent-terracotta);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 3.5rem;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .hero p {
+      font-style: italic;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-summon {
+      font-family: 'Space Grotesk', sans-serif;
+      background: rgba(194, 112, 82, 0.15);
+      border: 1px solid var(--accent-terracotta);
+      color: var(--text-main);
+      padding: 0.8rem 2rem;
+      font-size: 0.9rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-summon:hover {
+      background: var(--accent-terracotta);
+      box-shadow: 0 0 20px rgba(194, 112, 82, 0.4);
+      transform: scale(1.03);
+    }
+
+    /* Filter Chips */
+    .marketplace-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .filter-container {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+
+    .filter-chip {
+      font-family: 'Space Grotesk', sans-serif;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      transition: var(--transition);
+    }
+
+    .filter-chip:hover,
+    .filter-chip.active {
+      border-color: var(--accent-gold);
+      color: var(--text-main);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    /* Product Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2.5rem;
+      margin-bottom: 5rem;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .product-img-placeholder {
+      height: 240px;
+      background: #2e2825;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.1);
+      font-size: 3rem;
+      position: relative;
+    }
+
+    .product-category {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .product-info {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+    }
+
+    .rating {
+      color: var(--accent-gold);
+      font-size: 0.9rem;
+    }
+
+    .product-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+    }
+
+    .price {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .btn-summon-item {
+      font-family: 'Space Grotesk', sans-serif;
+      background: transparent;
+      border: 1px solid var(--text-muted);
+      color: var(--text-main);
+      padding: 0.5rem 1.2rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-summon-item:hover {
+      background: var(--text-main);
+      color: var(--bg-color);
+      border-color: var(--text-main);
+    }
+
+    /* Community / Weave Section */
+    .community-section {
+      max-width: 700px;
+      margin: 0 auto 5rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .weaver-box {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 3rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .weaver-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      color: var(--text-main);
+      font-family: 'Lora', serif;
+      font-size: 1rem;
+      resize: none;
+      margin-bottom: 1rem;
+      transition: var(--transition);
+    }
+
+    .weaver-input:focus {
+      outline: none;
+      border-color: var(--accent-terracotta);
+    }
+
+    .weaver-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .weaver-tools {
+      display: flex;
+      gap: 1rem;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .weaver-tools span:hover {
+      color: var(--text-main);
+    }
+
+    /* Post Card */
+    .post-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.02);
+      animation: fadeIn 0.5s ease;
+    }
+
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .post-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar-placeholder {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--accent-terracotta);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .author-info h4 {
+      font-size: 1rem;
+    }
+
+    .author-info span {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .post-content {
+      font-style: italic;
+      margin-bottom: 1.5rem;
+    }
+
+    .post-product-tag {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1rem;
+      color: var(--text-muted);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+    }
+
+    .post-action-btn {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: var(--transition);
+    }
+
+    .post-action-btn:hover {
+      color: var(--accent-gold);
+    }
+
+    /* Sidebar/Drawer for Sacred Bag */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      visibility: hidden;
+      z-index: 200;
+      transition: var(--transition);
+    }
+
+    .drawer-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      max-width: 100%;
+      height: 100vh;
+      background: var(--card-bg);
+      z-index: 201;
+      padding: 2rem;
+      box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 1rem;
+    }
+
+    .drawer-header h2 {
+      font-family: 'Cinzel', serif;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .cart-items-container {
+      flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .empty-cart-view {
+      text-align: center;
+      margin-top: 4rem;
+      color: var(--text-muted);
+    }
+
+    .empty-cart-view span {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 1rem;
+      color: var(--accent-terracotta);
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Responsive */
+    @media(max-width: 600px) {
+      .hero h1 {
+        font-size: 2.3rem;
+      }
+
+      .drawer {
+        width: 100%;
+        right: -100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">FOLKSY ROLL</a>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="toggleCart()">
+        🛒 <span class="cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav-btn">👤</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-tag">The Cosmic Hub</div>
+    <h1>A Unified Astral Experience.</h1>
+    <p>"Where artisan creations meet the heartbeat of our celestial community."</p>
+    <button class="btn-summon" onclick="summonFeatured()">Summon Featured Item</button>
+  </section>
+
+  <main class="marketplace-section">
+    <h2 class="section-title">Astral Marketplace</h2>
+
+    <div class="filter-container">
+      <button class="filter-chip active" onclick="filterItems('all', this)">All Items</button>
+      <button class="filter-chip" onclick="filterItems('leather bags', this)">Leather Bags</button>
+      <button class="filter-chip" onclick="filterItems('dog gear', this)">Dog Gear</button>
+      <button class="filter-chip" onclick="filterItems('dog beds', this)">Dog Beds</button>
+    </div>
+
+    <div class="grid" id="productGrid">
+    </div>
+  </main>
+
+  <section class="community-section">
+    <h2 class="section-title" style="margin-bottom: 2rem;">Community Stories</h2>
+
+    <div class="weaver-box">
+      <textarea class="weaver-input" id="weaverInput" placeholder="Cast a thought into the loom..." rows="3"></textarea>
+      <div class="weaver-footer">
+        <div class="weaver-tools">
+          <span>📷</span> <span>🏷️</span>
+        </div>
+        <button class="btn-summon" style="padding: 0.5rem 1.5rem; font-size: 0.8rem;"
+          onclick="weavePost()">Weave</button>
+      </div>
+    </div>
+
+    <div id="postsContainer">
+    </div>
+  </section>
+
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleCart()"></div>
+  <div class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <h2>Sacred Bag</h2>
+      <button class="drawer-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items-container" id="cartItemsContainer">
+    </div>
+  </div>
+
+  <footer>
+    © 2026 FOLKSY ROLL • STITCHED IN THE COSMOS
+  </footer>
+
+  <script>
+    // App State
+    const products = [
+      { id: 1, title: "The Sienna Satchel", category: "leather bags", price: 145.00, rating: "4.9", desc: "Vegetable-tanned leather, hand-stitched for a lifetime of stories.", symbol: "💼" },
+      { id: 2, title: "Wildflower Hemp Harness", category: "dog gear", price: 48.00, rating: "4.8", desc: "Eco-friendly hemp webbing with solid brass hardware.", symbol: "🐕" },
+      { id: 3, title: "Cloud-9 Wool Bolster Bed", category: "dog beds", price: 185.00, rating: "5.0", desc: "Upcycled wool and organic cotton filling for deep doggy dreams.", symbol: "🛏️" },
+      { id: 4, title: "Artisan Market Tote", category: "leather bags", price: 92.00, rating: "4.7", desc: "Distressed saddle leather with vintage buckle accents.", symbol: "👜" },
+      { id: 5, title: "Earthbound Braided Lead", category: "dog gear", price: 34.00, rating: "4.6", desc: "Soft-touch leather braiding with a heavy-duty snap hook.", symbol: "🦮" },
+      { id: 6, title: "Rustic Traveler Rucksack", category: "leather bags", price: 210.00, rating: "4.9", desc: "Waxed canvas and leather hybrid for the modern nomad.", symbol: "🎒" }
+    ];
+
+    let initialPosts = [
+      { author: "Willow Moon", time: "3H AGO", text: "Our morning walk felt different today. Luna is so comfortable in her new Wildflower harness. It's so rare to find something this beautiful and ethical. 🌿✨", item: "Wildflower Hemp Harness", price: "$48.00", initials: "WM" },
+      { author: "Oliver Birch", time: "6H AGO", text: "The smell of fresh leather in the studio this morning... Finishing up a batch of Sienna Satchels. Every stitch is a meditation. 🧵🐄", item: "The Sienna Satchel", price: "$145.00", initials: "OB" }
+    ];
+
+    let cart = [];
+
+    // UI Initialization
+    function init() {
+      renderProducts(products);
+      renderPosts();
+      updateCartUI();
+    }
+
+    function renderProducts(items) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = items.map(p => `
+                               <div class="product-card">
+                               <div class="product-img-placeholder">
+                               ${p.symbol}
+                               <span class="product-category">${p.category}</span>
+                               </div>
+                               <div class="product-info">
+                               <div class="product-header">
+                               <h3 class="product-title">${p.title}</h3>
+                               <span class="rating">★ ${p.rating}</span>
+                               </div>
+                               <p class="product-desc">"${p.desc}"</p>
+                               <div class="product-footer">
+                               <span class="price">$${p.price.toFixed(2)}</span>
+                               <button class="btn-summon-item" onclick="addToCart(${p.id})">Summon</button>
+                               </div>
+                               </div>
+                               </div>
+                               `).join('');
+    }
+
+    function renderPosts() {
+      const container = document.getElementById('postsContainer');
+      container.innerHTML = initialPosts.map(post => `
+                               <div class="post-card">
+                               <div class="post-header">
+                               <div class="post-author">
+                               <div class="avatar-placeholder">${post.initials}</div>
+                               <div class="author-info">
+                                <h4>${post.author}</h4>
+                                <span>${post.time}</span>
+                            </div>
+                        </div>
+                        <span style="color: var(--text-muted); cursor:pointer;">•••</span>
+                    </div>
+                    <div class="post-content">"${post.text}"</div>
+                    ${post.item ? `
+                        <div class="post-product-tag">
+                            <div>
+                                <span style="font-weight:600">${post.item}</span> — <span style="color:var(--accent-gold)">${post.price}</span>
+                            </div>
+                            <button class="btn-summon-item" style="font-size:0.7rem; padding: 0.3rem 0.8rem;" onclick="addByName('${post.item}')">Shop</button>
+                        </div>
+                    ` : ''}
+                    <div class="post-actions">
+                        <div class="post-action-btn" onclick="this.style.color='var(--accent-terracotta)'">❤️ <span>521</span></div>
+                        <div class="post-action-btn">💬 <span>42</span></div>
+                    </div>
+                </div>
+            `).join('');
+    }
+
+    // Filters
+    function filterItems(category, el) {
+      document.querySelectorAll('.filter-chip').forEach(chip => chip.classList.remove('active'));
+      el.classList.add('active');
+      if (category === 'all') {
+        renderProducts(products);
+      } else {
+        renderProducts(products.filter(p => p.category === category));
+      }
+    }
+
+    // Cart Actions
+    function toggleCart() {
+      document.getElementById('cartDrawer').classList.toggle('open');
+      document.getElementById('drawerOverlay').classList.toggle('open');
+    }
+
+    function addToCart(id) {
+      const prod = products.find(p => p.id === id);
+      cart.push(prod);
+      updateCartUI();
+
+      // Pop open cart instantly to show feedback
+      toggleCart();
+    }
+
+    function addByName(name) {
+      const prod = products.find(p => p.title === name);
+      if (prod) addToCart(prod.id);
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      const container = document.getElementById('cartItemsContainer');
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+                    <div class="empty-cart-view">
+                        <span>✨</span>
+                        <h3>The Loom Awaits...</h3>
+                        <p style="font-size:0.9rem; color: var(--text-muted); margin-top:0.5rem; padding: 0 1rem;">
+                            Your sacred bag is currently light as stardust. Explore our cosmic collection to find your treasure.
+                        </p>
+                    </div>
+                `;
+      } else {
+        container.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <div>
+                            <h4>${item.title}</h4>
+                            <span style="color:var(--accent-gold); font-family:'Space Grotesk'">${item.price.toFixed(2)}</span>
+                        </div>
+                        <button class="drawer-close" style="font-size:1rem;" onclick="removeFromCart(${index})">✕</button>
+                    </div>
+                `).join('') + `
+                    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1)">
+                        <button class="btn-summon" style="width:100%">Weave Checkout</button>
+                    </div>
+                `;
+      }
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCartUI();
+    }
+
+    function summonFeatured() {
+      const randomProd = products[Math.floor(Math.random() * products.length)];
+      addToCart(randomProd.id);
+    }
+
+    // Weaver Engine
+    function weavePost() {
+      const input = document.getElementById('weaverInput');
+      if (!input.value.trim()) return;
+
+      const newPost = {
+        author: "Cosmic Wanderer",
+        time: "JUST NOW",
+        text: input.value,
+        item: null,
+        price: "",
+        initials: "CW"
+      };
+
+      initialPosts.unshift(newPost);
+      renderPosts();
+      input.value = "";
+    }
+
+    // Instantiation
+    window.onload = init;
+  </script>
+</body>
+
 </html>
