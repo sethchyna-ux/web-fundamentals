@@ -1,0 +1,297 @@
+<link-local>   </link-local>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid OS - Layer 4 Shell</title>
+    <style>
+        /* --- SYSTEM RESET & CORE VARIABLES --- */
+        :root {
+            --bg-wallpaper: linear-gradient(135deg, #1e1e2f, #11111c);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-color: #ffffff;
+            --accent-color: #007aff;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none; /* Prevents text highlighting like a webpage */
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: var(--font-stack);
+            color: var(--text-color);
+            background: var(--bg-wallpaper);
+        }
+
+        /* --- MODE SWITCHER CONTROLS (Dev Tool) --- */
+        #mode-controls {
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            z-index: 10000;
+            display: flex;
+            gap: 5px;
+            background: rgba(0,0,0,0.6);
+            padding: 5px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+        }
+        #mode-controls button {
+            background: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        #mode-controls button:hover { background: var(--accent-color); }
+
+        /* --- TOP STATUS BAR --- */
+        #top-bar {
+            height: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            font-size: 13px;
+            z-index: 5000;
+            transition: all 0.3s ease;
+        }
+
+        /* --- DESKTOP / WINDOW AREA --- */
+        #desktop {
+            position: relative;
+            width: 100%;
+            height: calc(100vh - 30px); /* Subtract top bar */
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* --- BOTTOM DOCK / TASKBAR --- */
+        #dock {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 0 20px;
+            border-radius: 16px;
+            z-index: 5000;
+            transition: all 0.3s ease;
+        }
+        .app-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--accent-color);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+        .app-icon:hover { transform: translateY(-5px) scale(1.1); }
+
+        
+
+        /* --- WINDOWS --- */
+        .window {
+            position: absolute;
+            width: 400px;
+            height: 250px;
+            background: rgba(30, 30, 45, 0.85);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            top: 100px;
+            left: 100px;
+            transition: width 0.3s, height 0.3s, top 0.3s, left 0.3s, border-radius 0.3s;
+        }
+        .window-header {
+            height: 30px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            cursor: grab;
+        }
+        .window-content {
+            flex: 1;
+            padding: 15px;
+            font-family: monospace;
+        }
+
+        /* ==========================================================================
+           DARWIN (MAC) MODE STYLES
+           ========================================================================== */
+        body.darwin-mode #top-bar,
+        body.darwin-mode #dock {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+        body.darwin-mode .window-controls { display: flex; gap: 6px; }
+        .win-btn { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .close { background: #ff5f56; }
+        .min { background: #ffbd2e; }
+        .max { background: #27c93f; }
+
+        /* ==========================================================================
+           LINUX MODE STYLES (Tiling Window Manager)
+           ========================================================================== */
+        body.linux-mode #top-bar {
+            background: #111;
+            color: #00ff66;
+            font-family: monospace;
+        }
+        body.linux-mode #dock {
+            left: 0;
+            bottom: 0;
+            transform: none;
+            width: 100%;
+            border-radius: 0;
+            background: #1a1a1a;
+            justify-content: flex-start;
+        }
+        body.linux-mode #desktop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            padding: 10px;
+            height: calc(100vh - 90px); /* Account for top bar and bottom bar */
+        }
+        body.linux-mode .window {
+            position: static; /* Let grid handle positioning */
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0;
+            border: 2px solid #00ff66;
+            background: #0d0d0d;
+        }
+        body.linux-mode .window-controls { display: none; }
+        body.linux-mode .app-icon { border-radius: 0; width: 40px; height: 40px; }
+
+        /* ==========================================================================
+           ANDROID MODE STYLES (Mobile View)
+           ========================================================================== */
+        body.android-mode #top-bar {
+            background: transparent;
+            font-weight: bold;
+        }
+        body.android-mode #desktop { padding: 0; }
+        body.android-mode .window {
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: calc(100vh - 30px) !important;
+            border-radius: 0;
+            border: none;
+        }
+        body.android-mode .window-header { display: none; }
+        body.android-mode #dock {
+            bottom: 0;
+            width: 100%;
+            border-radius: 20px 20px 0 0;
+            background: rgba(20,20,20,0.95);
+            justify-content: space-around;
+        }
+        body.android-mode .app-icon { border-radius: 50%; }
+    </style>
+</head>
+<body class="darwin-mode">
+
+    <div id="mode-controls">
+        <button onclick="setMode('darwin')">Darwin (Mac)</button>
+        <button onclick="setMode('linux')">Linux (i3wm)</button>
+        <button onclick="setMode('android')">Android</button>
+    </div>
+
+    <div id="top-bar">
+        <div id="left-status"> Hybrid OS</div>
+        <div id="center-status">Layer 4 Windows Shell</div>
+        <div id="right-status" id="clock">12:00 PM</div>
+    </div>
+
+    <div id="desktop">
+        <div class="window" id="term-win">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="win-btn close"></span>
+                    <span class="win-btn min"></span>
+                    <span class="win-btn max"></span>
+                </div>
+                <span style="margin-left: 10px; font-size: 12px;">bash - terminal</span>
+            </div>
+            <div class="window-content">
+                <p style="color: #00ff66;">user@hybridos:~$ <span style="color:#fff;">echo "Ready for Phase 2"</span></p>
+                <p>Ready for Phase 2</p>
+                <p style="color: #00ff66;">user@hybridos:~$ <span class="cursor">_</span></p>
+            </div>
+        </div>
+
+        <div class="window" id="sys-win" style="top: 150px; left: 530px; background: rgba(45,30,45,0.85);">
+            <div class="window-header">
+                <div class="window-controls">
+                    <span class="win-btn close"></span>
+                    <span class="win-btn min"></span>
+                    <span class="win-btn max"></span>
+                </div>
+                <span style="margin-left: 10px; font-size: 12px;">System Stats</span>
+            </div>
+            <div class="window-content">
+                <p>Base Layer: Windows NT</p>
+                <p>Compositor: Edge WebView2</p>
+                <p>Daemon: Disconnected (Phase 2)</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="dock">
+        <div class="app-icon" style="background:#333;">>_</div>
+        <div class="app-icon" style="background:#ff9500;">📁</div>
+        <div class="app-icon" style="background:#ff2d55;">⚙️</div>
+        <div class="app-icon" style="background:#5856d6;">🌐</div>
+    </div>
+
+    <script>
+        // --- CORE SYSTEM CLOCK ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('right-status').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- OS MODE SWITCHER LOGIC ---
+        function setMode(mode) {
+            document.body.className = `${mode}-mode`;
+            
+            const leftStatus = document.getElementById('left-status');
+            if (mode === 'darwin') leftStatus.innerText = ' Hybrid OS';
+            if (mode === 'linux') leftStatus.innerText = '[root@hybridos ~]#';
+            if (mode === 'android') leftStatus.innerText = '100% 🔋';
+        }
+    </script>
+</body>
+</html>
